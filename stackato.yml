@@ -1,0 +1,17 @@
+name: redmine
+instances: 1
+mem: 256M
+framework:
+  type: rails3
+  
+services:
+  redmine-postgresql: postgresql
+  
+hooks:
+  pre-staging:
+    - bundle exec rake generate_secret_token
+    - "env |grep DATABASE"
+  post-staging:
+    - bundle exec rake redmine:load_default_data
+    - bundle exec rake assets:precompile
+    - "env |grep DATABASE"
