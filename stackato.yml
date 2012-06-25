@@ -9,9 +9,13 @@ services:
   
 hooks:
   pre-staging:
+    - sudo apt-get -y install git git-core git-daemon-run gitosis
     - bundle exec rake generate_secret_token
     - "env |grep DATABASE"
   post-staging:
     - bundle exec rake redmine:load_default_data
     - bundle exec rake assets:precompile
     - "env |grep DATABASE"
+    
+ignores: 
+  - .git
